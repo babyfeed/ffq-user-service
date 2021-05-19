@@ -48,3 +48,6 @@ ffq-user-service.iml
 *.iml
 .classpath
 .project
+/.vs/ffq-user-service/v16/.suo
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
