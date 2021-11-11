@@ -11,5 +11,7 @@ public interface ParentRepository extends UserRepository<Parent> {
     List<Parent> findAllByAssignedclinician(String assignedclinician);
 
     void deleteAllByAssignedclinician(String assignedclinician);
+
+    Parent findByuserId(String userId);
 }
 

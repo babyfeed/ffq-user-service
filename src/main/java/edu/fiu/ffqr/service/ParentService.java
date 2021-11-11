@@ -25,4 +25,12 @@ public class ParentService extends UserService<Parent, ParentRepository> {
 	public void deleteByAssignedclinician(String assignedclinician) {
 		this.repository.deleteAllByAssignedclinician(assignedclinician);
 	}
+
+	public Parent findByuserId(String userId) {
+		return this.repository.findByuserId(userId);
+	}
+
+	public Parent update(Parent parent) {
+		return this.repository.save(parent);
+	}
 }
