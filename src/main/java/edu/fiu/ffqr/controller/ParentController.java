@@ -48,15 +48,14 @@ public class ParentController{
 		return parentService.getUserByUserIdNoPassword(userId);
 	}
     
-    @PostMapping("/createparent")
-    public Parent createUser(@RequestBody Parent user) throws JsonProcessingException {
+   @PostMapping("/createparent")
+   public Parent createUser(@RequestBody Parent user) throws JsonProcessingException {
 
       if (parentService.getUserByUsername(user.getUsername()) != null) {
             throw new IllegalArgumentException("A user with Username " + user.getUsername() + " already exists");
       }  
-	  return parentService.create(user);
-	  
-  }
+	  return parentService.create(user);	  
+   }
 
   @PutMapping("/updateparent")
     public void updateUser(@RequestBody Parent user) throws JsonProcessingException {
@@ -97,12 +96,37 @@ public class ParentController{
 		return users;
 	}
 	
+   @PutMapping("/updaterecommend")
+   public Parent updateRecommend(@RequestBody Parent data) throws JsonProcessingException {
+         // Get parent's ID
+         String userId = data.getUserId();
+
+         // Make sure ID exists
+         if (null == userId) {
+         throw new IllegalArgumentException("Missing Parent user ID");
+         }
+
+         // Get parent with that userID
+         Parent parentItem = parentService.findByuserId(userId);
+         // Make sure parent with given ID exists
+         if (null == parentItem) {
+			throw new IllegalArgumentException("Invalid parent user ID");
+			}
+
+         if(data.getRecommendTime() != null) {
+            parentItem.setRecommendTime(data.getRecommendTime());
+         }
+         parentService.update(parentItem);
+
+         return parentItem;
+   }
+	
 	  
-	  
-	  @DeleteMapping("/delete")
-	  public String delete(@RequestParam String userId) {
+	@DeleteMapping("/delete")
+	public String delete(@RequestParam String userId) {
         parentService.deleteById(userId);
 	  	  return "Deleted " + userId;
 	  }
 	
+
 }
