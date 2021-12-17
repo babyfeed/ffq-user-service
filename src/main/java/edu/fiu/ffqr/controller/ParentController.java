@@ -26,7 +26,7 @@ import edu.fiu.ffqr.service.ParentService;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/parents")
-public class ParentController{
+public class ParentController {
 
     @Autowired
     private ParentService parentService;
@@ -35,39 +35,39 @@ public class ParentController{
 
     public ParentController() {
     }
-    
+
     @GetMapping("/all")
     public List<Parent> allClinicians() throws JsonProcessingException {
-        
+
         List<Parent> users = parentService.getAll();
         return users;
-    }  
+    }
 
     @GetMapping("/{userID}")
-	public Parent getParent(@PathVariable("userID") String userId) {
-		return parentService.getUserByUserIdNoPassword(userId);
-	}
-    
-   @PostMapping("/createparent")
-   public Parent createUser(@RequestBody Parent user) throws JsonProcessingException {
+    public Parent getParent(@PathVariable("userID") String userId) {
+        return parentService.getUserByUserIdNoPassword(userId);
+    }
 
-      if (parentService.getUserByUsername(user.getUsername()) != null) {
+    @PostMapping("/createparent")
+    public Parent createUser(@RequestBody Parent user) throws JsonProcessingException {
+
+        if (parentService.getUserByUsername(user.getUsername()) != null) {
             throw new IllegalArgumentException("A user with Username " + user.getUsername() + " already exists");
-      }  
-	  return parentService.create(user);	  
-   }
+        }
+        return parentService.create(user);
+    }
 
-  @PutMapping("/updateparent")
+    @PutMapping("/updateparent")
     public void updateUser(@RequestBody Parent user) throws JsonProcessingException {
-        
+
         if (parentService.getUserByUserId(user.getUserId()) == null) {
             throw new IllegalArgumentException("A user with Username " + user.getUsername() + " doesn't exist");
         }
 
         Parent currentUser = parentService.getUserByUserId(user.getUserId());
-        
+
         currentUser.setAssignedclinic(user.getAssignedclinic());
-        currentUser.setAssignedclinician(user.getAssignedclinician()); 
+        currentUser.setAssignedclinician(user.getAssignedclinician());
         currentUser.setChildrenNames(user.getChildrenNames());
         currentUser.setPrefix(user.getPrefix());
 
@@ -76,7 +76,7 @@ public class ParentController{
 
     @PostMapping("/create")
     public Parent create(@RequestBody Parent item) throws JsonProcessingException {
-        
+
         if (parentService.getUserByUsername(item.getUsername()) != null) {
             throw new IllegalArgumentException("A parent with Username " + item.getUsername() + " already exists");
         }
@@ -84,49 +84,50 @@ public class ParentController{
         return parentService.create(item);
     }
 
-	@PostMapping("/createManyParents")
-	public ArrayList<Parent> create(@RequestBody ArrayList<Parent> users) {
-		Parent user = null;
-		
-		for(Parent s : users)
-		{
-			user = parentService.create(s);
-		}
-		
-		return users;
-	}
-	
-   @PutMapping("/updaterecommend")
-   public Parent updateRecommend(@RequestBody Parent data) throws JsonProcessingException {
-         // Get parent's ID
-         String userId = data.getUserId();
+    @PostMapping("/createManyParents")
+    public ArrayList<Parent> create(@RequestBody ArrayList<Parent> users) {
+        Parent user = null;
 
-         // Make sure ID exists
-         if (null == userId) {
-         throw new IllegalArgumentException("Missing Parent user ID");
-         }
+        for (Parent s : users) {
+            user = parentService.create(s);
+        }
 
-         // Get parent with that userID
-         Parent parentItem = parentService.findByuserId(userId);
-         // Make sure parent with given ID exists
-         if (null == parentItem) {
-			throw new IllegalArgumentException("Invalid parent user ID");
-			}
+        return users;
+    }
 
-         if(data.getRecommendTime() != null) {
+    @PutMapping("/updaterecommend")
+    public Parent updateRecommend(@RequestBody Parent data) throws JsonProcessingException {
+        // Get parent's ID
+        String userId = data.getUserId();
+
+        // Make sure ID exists
+        if (null == userId) {
+            throw new IllegalArgumentException("Missing Parent user ID");
+        }
+
+        // Get parent with that userID
+        Parent parentItem = parentService.findByuserId(userId);
+        // Make sure parent with given ID exists
+        if (null == parentItem) {
+            throw new IllegalArgumentException("Invalid parent user ID");
+        }
+
+        if (data.getRecommendTime() != null) {
             parentItem.setRecommendTime(data.getRecommendTime());
-         }
-         parentService.update(parentItem);
+        }
+        // everything a parent clicks submit read-recommend button, times plus one
+        parentItem.setTimesOfReading(parentItem.getTimesOfReading() + 1);
+        parentService.update(parentItem);
 
-         return parentItem;
-   }
-	
-	  
-	@DeleteMapping("/delete")
-	public String delete(@RequestParam String userId) {
+        return parentItem;
+    }
+
+
+    @DeleteMapping("/delete")
+    public String delete(@RequestParam String userId) {
         parentService.deleteById(userId);
-	  	  return "Deleted " + userId;
-	  }
-	
+        return "Deleted " + userId;
+    }
+
 
 }
