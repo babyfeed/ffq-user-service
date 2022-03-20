@@ -30,7 +30,7 @@ POST calls
 - Create a an item based on api used: **/{api}/create**
     In the request body, pass one item object in a JSON payload. 
     Example payload:
-    {"userId": "1","username": "clinician1", "userpassword": "admin123", "usertype": "clinician", "abbreviation": "Dr", "firstname": "Mary", "lastname": "Adams", "assignedclinic": 1, "previousclinics": [1], "isactive": true}
+    {"userId": "1","username": "clinician1", "userpassword": "Cristina_123@", "usertype": "clinician", "abbreviation": "Dr", "firstname": "Mary", "lastname": "Adams", "assignedclinic": 1, "previousclinics": [1], "isactive": true}
 
 DELETE calls
 - Delete item by ID: **/{api}/delete/{ID}**
